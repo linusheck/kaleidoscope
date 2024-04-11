@@ -1,0 +1,91 @@
+
+    digraph textX {
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+    node[
+        shape=record,
+        style=filled,
+        fillcolor=aliceblue
+    ]
+    nodesep = 0.3
+    edge[dir=black,arrowtail=empty]
+
+
+5175788640[ label="{Model|}"]
+
+5175791328[ label="{Constant|name: ID\lvalue: Literal\l}"]
+
+5175794016[ label="{Type|lowerBound: Literal\lupperBound: Literal\l}"]
+
+5175799392[ label="{Automaton|name: ID\l}"]
+
+5175802080[ label="{Variable|name: ID\l}"]
+
+5175804768[ label="{*Expression|}"]
+
+5175807456[ label="{Flip|}"]
+
+5175828960[ label="{Uniform|}"]
+
+5175812832[ label="{MathOperation|operator: MathOperator\l}"]
+
+5175818208[ label="{Comparison|operator: ComparisonOperator\l}"]
+
+5175823584[ label="{LogicalOperation|operator: LogicalOperator\l}"]
+
+5175831648[ label="{Transition|}"]
+
+5175834336[ label="{*Guard|}"]
+
+5175837024[ label="{*Statement|}"]
+
+5175839712[ label="{Assignment|variable: ID\l}"]
+
+5175842400[ label="{Composition|name: ID\l}"]
+
+
+
+5175788640 -> 5175791328[arrowtail=diamond, dir=both, headlabel="constants 1..*"]
+5175788640 -> 5175799392[arrowtail=diamond, dir=both, headlabel="automaton 1..*"]
+5175791328 -> 5175794016[arrowtail=diamond, dir=both, headlabel="type "]
+5175799392 -> 5175802080[arrowtail=diamond, dir=both, headlabel="variables 1..*"]
+5175799392 -> 5175831648[arrowtail=diamond, dir=both, headlabel="transitions 1..*"]
+5175802080 -> 5175794016[arrowtail=diamond, dir=both, headlabel="type "]
+5175802080 -> 5175804768[arrowtail=diamond, dir=both, headlabel="expression "]
+5175804768 -> 5175807456 [dir=back]
+5175804768 -> 5175828960 [dir=back]
+5175804768 -> 5175812832 [dir=back]
+5175804768 -> 5175818208 [dir=back]
+5175804768 -> 5175823584 [dir=back]
+5175807456 -> 5175804768[arrowtail=diamond, dir=both, headlabel="probability "]
+5175828960 -> 5175804768[arrowtail=diamond, dir=both, headlabel="lowerBound "]
+5175828960 -> 5175804768[arrowtail=diamond, dir=both, headlabel="upperBound "]
+5175812832 -> 5175804768[arrowtail=diamond, dir=both, headlabel="left "]
+5175812832 -> 5175804768[arrowtail=diamond, dir=both, headlabel="right "]
+5175818208 -> 5175804768[arrowtail=diamond, dir=both, headlabel="left "]
+5175818208 -> 5175804768[arrowtail=diamond, dir=both, headlabel="right "]
+5175823584 -> 5175804768[arrowtail=diamond, dir=both, headlabel="left "]
+5175823584 -> 5175804768[arrowtail=diamond, dir=both, headlabel="right "]
+5175831648 -> 5175834336[arrowtail=diamond, dir=both, headlabel="guard "]
+5175831648 -> 5175837024[arrowtail=diamond, dir=both, headlabel="statements 1..*"]
+5175834336 -> 5175804768 [dir=back]
+5175837024 -> 5175839712 [dir=back]
+5175839712 -> 5175804768[arrowtail=diamond, dir=both, headlabel="expression "]
+5175842400 -> 5175799392[arrowtail=diamond, dir=both, headlabel="automata 1..*"]
+match_rules [ shape=plaintext, label=< <table>
+	<tr>
+		<td><b>ComparisonOperator</b></td><td>&lt;|&gt;|&lt;=|&gt;=|==|!=</td>
+	</tr>
+	<tr>
+		<td><b>Literal</b></td><td>INT|FLOAT</td>
+	</tr>
+	<tr>
+		<td><b>LogicalOperator</b></td><td>&amp;&amp;||||!</td>
+	</tr>
+	<tr>
+		<td><b>MathOperator</b></td><td>+|-|*|/</td>
+	</tr>
+</table> >]
+
+
+}

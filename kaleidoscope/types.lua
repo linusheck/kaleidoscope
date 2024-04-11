@@ -1,0 +1,46 @@
+-- VariableName = 0
+
+-- BoolType = {}
+-- BoolType.mt = {}
+-- function bool()
+--     local obj = {}
+--     setmetatable(obj, BoolType.mt)
+--     obj.name = "bool" .. tostring(VariableName)
+--     VariableName = VariableName + 1
+--     return obj
+-- end
+-- function BoolType.mt.str()
+--     return "bool"
+-- end
+
+-- IntType = {}
+-- IntType.mt = {}
+-- function int()
+--     local obj = {}
+--     setmetatable(obj, IntType.mt)
+--     obj.name = "int" .. tostring(VariableName)
+--     VariableName = VariableName + 1
+--     return obj
+-- end
+-- function int(lower, upper)
+--     local obj = {}
+--     setmetatable(obj, IntType.mt)
+--     obj.lower = lower
+--     obj.upper = upper
+--     return obj
+-- end
+-- function IntType.str()
+--     return "bool"
+-- end
+
+-- Types = {BoolType, IntType}
+-- for _, type in pairs(Types) do
+--     type.mt.__eq = function (a, b)
+--         print("aaa")
+--         return {
+--             op = "==",
+--             left = a.name,
+--             right = b.name,
+--         }
+--     end
+-- end

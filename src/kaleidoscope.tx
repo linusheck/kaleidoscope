@@ -1,0 +1,116 @@
+Model:
+    constants*=Constant
+    params*=Param
+    automata*=Automaton
+;
+
+Constant:
+    "const" name=ID ":" type=Type "=" value=PreprocessorExpression;
+
+Param:
+    "param" name=ID ":" type=Type "=" value=ConstExpression;
+
+Type:
+    list="list" "[" type=Type "," capacity=PreprocessorExpression "]"
+    | nonrecursive=NonrecursiveType
+;
+
+NonrecursiveType:
+    bounded=BasicType ("[" lowerBound=ConstExpression "," upperBound=ConstExpression "]")?
+    | basic=BasicType
+;
+
+BasicType:
+    "real"
+    | "bool"
+    | "int"
+;
+
+Name:
+    array=ID "[" index=ConstExpression "]" | plain=ID;
+
+Literal:
+    STRICTFLOAT | INT | "true" | "false" | Name;
+
+PreprocessorLiteral:
+    STRICTFLOAT | INT | Name;
+
+Automaton:
+    "automaton" name=ID "{" 
+        variables*=Variable
+        transitions*=Transition
+    "}";
+
+Variable:
+    name=ID ":" type=Type ("=" expression=Expression)?;
+
+Expression:
+    Function | MathOperation | LogicalOperation;
+
+ConstExpression:
+    MathOperation | LogicalOperation;
+
+PreprocessorExpression:
+    PreprocessorMathOperation;
+
+LogicalOperation:
+    left=Comparison operator=LogicalOperator right=Comparison | Comparison;
+
+LogicalOperator:
+    "&&" | "||";
+
+Comparison:
+    left=MathOperation operator=ComparisonOperator right=MathOperation |  "!" Comparison | Literal;
+
+ComparisonOperator:
+    "<" | ">" | "<=" | ">=" | "==" | "!=";
+
+MathOperation:
+    (left=ProductOperation)? operator=SumOperator right=ProductOperation | ProductOperation;
+
+PreprocessorMathOperation:
+    (left=PreprocessorProductOperation)? operator=SumOperator right=PreprocessorProductOperation | PreprocessorProductOperation;
+
+SumOperator:
+    "+" | "-";
+
+ProductOperation:
+    left=Literal operator=ProductOperator right=Literal | Literal;
+
+PreprocessorProductOperation:
+    left=PreprocessorLiteral operator=ProductOperator right=PreprocessorLiteral | PreprocessorLiteral;
+
+ProductOperator:
+    "*" | "/";
+
+Function:
+    Uniform;
+
+Uniform:
+    "uniform" "(" lowerBound=ConstExpression "," upperBound=ConstExpression ")";
+
+Transition:
+    "[" (action=ID)? "]" "(" guard=LogicalOperation ")" "{" statements*=Statement "}";
+
+Statement:
+    Prob | If | Assignment;
+
+Assignment:
+    variable=Name "'" "=" expression=Expression;
+
+Prob:
+    "prob" "(" condition=LogicalOperation ")" "{" statements*=Statement "}"
+        ("elseprob" "(" condition=LogicalOperation ")" "{" statements*=Statement "}")*
+        "else" "{" statements*=Statement "}";
+
+If:
+    "if" "(" condition=LogicalOperation ")" "{" statements*=Statement "}"
+        ("elseif" "(" condition=LogicalOperation ")" "{" statements*=Statement "}")*
+        "else" "{" statements*=Statement "}";
+
+Composition:
+    "compose" name=ID "{" automata+=Automaton* "}";
+
+Comment:
+    /\/\*(.|\n)*?\*\// | /\/\/.*?$/
+;

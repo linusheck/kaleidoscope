@@ -1,0 +1,32 @@
+const n: int
+
+automaton Node {
+    has_token: bool
+    right_has_token: ref[bool]
+
+    init {
+        has_token = true
+    }
+
+    [step] (has_token != right_has_token) {
+        has_token = flip(0.5)
+    }
+
+    [step] (has_token = right_has_token) {
+        has_token = right_has_token
+    }
+}
+
+
+
+compose Cryptographers {
+    // This is lua code
+    nodes = create(Node, n)
+
+    for i in 1, n - 1 do
+        nodes[i].right_has_token = ref(nodes[i + 1].has_token)
+    end
+    nodes[n].right_has_token = ref(nodes[1].has_token)
+
+    return nodes
+}

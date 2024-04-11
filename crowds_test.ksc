@@ -1,0 +1,51 @@
+const PF: real = 0.8
+
+const goodC: real = 0.909
+
+// Total number of protocol runs to analyze
+const TotalRuns: int = 4
+
+// Actual number of good crowd members
+const CrowdSize: int = 10
+
+const CrowdSizes: list[int, CrowdSize] = 10
+
+automaton Network {
+    // integers can have optional bounds
+    runCount: int[0, TotalRuns] = TotalRuns
+
+    // lists always have to have fixed bounds.
+    // they translate into variables:
+    // observe0, observe1, ...
+    observe: list[int[0, TotalRuns], CrowdSize]
+
+    lastSeen: int = 0
+    running: bool = false
+    delivered: bool = false
+
+    [] (runCount > 0 && running) {
+        running' = true
+        runCount' = runCount - 1
+        // zero is always the real sender
+        lastSeen' = 0
+    }
+
+    [] (running && !deliver) {
+        prob (goodC) {
+            // Good members deliver with probability 1 - PF
+            prob(PF) {
+                lastSeen' = uniform(0, CrowdSize)
+            } else {
+                delivered' = true
+            }
+        } else {
+            // Bad members record and always deliver
+            observe[lastSeen]' = observe[lastSeen] + 1
+            delivered' = true
+        }
+    }
+    [] (running && deliver) {
+        running' = false
+        deliver' = false
+    }
+}
